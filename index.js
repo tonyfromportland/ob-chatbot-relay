@@ -36,19 +36,18 @@ app.post('/chat', async (req, res) => {
   console.log('🔐 Using Agent ID:', MISTRAL_AGENT_ID);
   
   try {
-    const response = await axios.post(
-      'https://api.mistral.ai/agents/chat',
-      {
-        agent_id: MISTRAL_AGENT_ID,
-        messages: [{ role: 'user', content: userMessage }]
-      },
-      {
-        headers: {
-          'Authorization': `Bearer ${MISTRAL_API_KEY}`,
-          'Content-Type': 'application/json'
-        }
-      }
-    );
+const response = await axios.post(
+  `https://api.mistral.ai/v1/agents/${MISTRAL_AGENT_ID}/chat`,
+  {
+    messages: [{ role: 'user', content: userMessage }]
+  },
+  {
+    headers: {
+      'Authorization': `Bearer ${MISTRAL_API_KEY}`,
+      'Content-Type': 'application/json'
+    }
+  }
+);
 
     const botReply = response.data.choices[0].message.content;
     res.json({ reply: botReply });
