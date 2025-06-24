@@ -39,18 +39,19 @@ app.post('/chat', async (req, res) => {
 
   try {
     const response = await axios.post(
-      `https://api.mistral.ai/v1/agents/${MISTRAL_AGENT_ID}/chat`,
-      {
-        messages: [{ role: 'user', content: userMessage }]
-      },
-      {
-        headers: {
-          'Authorization': `Bearer ${MISTRAL_API_KEY}`,
-          'Content-Type': 'application/json'
-        }
-      }
-    );
-
+  'https://api.mistral.ai/v1/chat/completions',
+  {
+    model: 'mistral-large', // or mistral-medium, mistral-small
+    messages: [{ role: 'user', content: userMessage }]
+  },
+  {
+    headers: {
+      'Authorization': `Bearer ${MISTRAL_API_KEY}`,
+      'Content-Type': 'application/json'
+    }
+  }
+);
+    
     const botReply = response.data.choices?.[0]?.message?.content;
     res.json({ reply: botReply || '[Empty response]' });
   } catch (error) {
