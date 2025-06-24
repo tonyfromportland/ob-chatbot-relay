@@ -1,4 +1,4 @@
-require('dotenv').config(); // Enables .env support in local dev
+require('dotenv').config();
 
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -6,34 +6,28 @@ const axios = require('axios');
 const cors = require('cors');
 
 const app = express();
-
-// Bind to interface and port
 const PORT = process.env.PORT || 3000;
 const HOST = '0.0.0.0';
 
-// Load secrets
 const MISTRAL_API_KEY = process.env.MISTRAL_API_KEY?.trim();
 const MISTRAL_AGENT_ID = process.env.MISTRAL_AGENT_ID?.trim();
 
-// Validate secrets
 if (!MISTRAL_API_KEY || !MISTRAL_AGENT_ID) {
-  console.error('❌ Missing MISTRAL_API_KEY or MISTRAL_AGENT_ID.');
+  console.error('❌ Missing MISTRAL_API_KEY or MISTRAL_AGENT_ID. Check your environment variables.');
   process.exit(1);
 }
 
 app.use(cors());
 app.use(bodyParser.json());
 
-// Health check
 app.get('/health', (req, res) => {
   res.status(200).send('✅ OB ChatBot Relay is healthy.');
 });
 
-// Chat route
 app.post('/chat', async (req, res) => {
   const userMessage = req.body.message;
-  console.log('📩 Message:', userMessage);
-  console.log('🔐 Agent ID:', MISTRAL_AGENT_ID);
+  console.log('📨 Received message:', userMessage);
+  console.log('🔐 Using Agent ID:', MISTRAL_AGENT_ID);
 
   try {
     const response = await axios.post(
@@ -50,8 +44,8 @@ app.post('/chat', async (req, res) => {
       }
     );
 
-    const reply = response.data.choices?.[0]?.message?.content || '[No reply]';
-    res.json({ reply });
+    const botReply = response.data.choices[0].message.content;
+    res.json({ reply: botReply });
   } catch (error) {
     console.error('❌ Mistral API Error:', error.response?.data || error.message);
     res.status(500).json({ error: 'Failed to fetch response from chatbot.' });
