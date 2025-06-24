@@ -12,7 +12,6 @@ const MISTRAL_AGENT_ID = process.env.MISTRAL_AGENT_ID;
 app.use(cors());
 app.use(bodyParser.json());
 
-// 🔍 Basic route to confirm the server is alive
 app.get('/', (req, res) => {
   res.send('OB ChatBot Relay is running.');
 });
