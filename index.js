@@ -4,17 +4,16 @@ const axios = require('axios');
 const cors = require('cors');
 
 const app = express();
-const port = process.env.PORT || 3000;
+
+// Force the correct address and port
+const PORT = 3000;
+const HOST = '0.0.0.0';
 
 const MISTRAL_API_KEY = process.env.MISTRAL_API_KEY;
 const MISTRAL_AGENT_ID = process.env.MISTRAL_AGENT_ID;
 
 app.use(cors());
 app.use(bodyParser.json());
-
-app.get('/', (req, res) => {
-  res.send('OB ChatBot Relay is running.');
-});
 
 app.post('/chat', async (req, res) => {
   const userMessage = req.body.message;
@@ -37,11 +36,12 @@ app.post('/chat', async (req, res) => {
     const botReply = response.data.choices[0].message.content;
     res.json({ reply: botReply });
   } catch (error) {
-    console.error('❌ Mistral API Error:', error.response?.data || error.message);
+    console.error('Mistral API Error:', error.response?.data || error.message);
     res.status(500).json({ error: 'Failed to fetch response from chatbot.' });
   }
 });
 
-app.listen(port, '0.0.0.0', () => {
-  console.log(`OB ChatBot Relay is running on http://0.0.0.0:${port}`);
+// 👇 This is the important part:
+app.listen(PORT, HOST, () => {
+  console.log(`OB ChatBot Relay is running at http://${HOST}:${PORT}`);
 });
