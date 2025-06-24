@@ -6,11 +6,9 @@ const cors = require('cors');
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Replace this with your real Mistral API key
-const MISTRAL_API_KEY = 'your-mistral-api-key-here';
-
-// Replace with your OB ChatBot Agent ID
-const MISTRAL_AGENT_ID = '8HEi3W2CHrrkzhq5BwZ8UnjMgDCu3x2V';
+// Use environment variables set in Fly.io Secrets
+const MISTRAL_API_KEY = process.env.MISTRAL_API_KEY;
+const MISTRAL_AGENT_ID = process.env.MISTRAL_AGENT_ID;
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -35,6 +33,7 @@ app.post('/chat', async (req, res) => {
 
     const botReply = response.data.choices[0].message.content;
     res.json({ reply: botReply });
+
   } catch (error) {
     console.error('Error from Mistral API:', error.response?.data || error.message);
     res.status(500).json({ error: 'Failed to fetch response from chatbot.' });
@@ -42,5 +41,5 @@ app.post('/chat', async (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`OB ChatBot Relay is running on port ${port}`);
+  console.log(`✅ OB ChatBot Relay is running on port ${port}`);
 });
