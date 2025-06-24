@@ -31,11 +31,11 @@ app.post('/chat', async (req, res) => {
 
   try {
     const response = await axios.post(
-      'https://api.mistral.ai/v1/chat/agent',
-      {
-        agent_id: MISTRAL_AGENT_ID,
-        messages: [{ role: 'user', content: userMessage }]
-      },
+  'https://api.mistral.ai/v1/chat/agent',
+  {
+    agent_id: MISTRAL_AGENT_ID,
+    messages: [{ role: 'user', content: userMessage }]
+  },
       {
         headers: {
           'Authorization': `Bearer ${MISTRAL_API_KEY}`,
@@ -54,4 +54,8 @@ app.post('/chat', async (req, res) => {
 
 app.listen(PORT, HOST, () => {
   console.log(`✅ OB ChatBot Relay is running at http://${HOST}:${PORT}`);
+});
+
+app.get('/health', (req, res) => {
+  res.status(200).send('✅ OB ChatBot Relay is healthy.');
 });
