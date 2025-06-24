@@ -4,7 +4,7 @@ const axios = require('axios');
 const cors = require('cors');
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = 3000;
 
 const MISTRAL_API_KEY = process.env.MISTRAL_API_KEY;
 const MISTRAL_AGENT_ID = process.env.MISTRAL_AGENT_ID;
